@@ -1,0 +1,69 @@
+syntax = "proto3";
+package proto;
+option go_package = "./";
+
+message Category {
+    int64 id = 1;
+    string name = 2;
+    string keyword = 3;
+    string created_at= 4;
+    string updated_at = 5;
+}
+
+message ReadCategoryRequest {
+    int64 id = 1;
+}
+
+message ReadCategoryResponse {
+    Category category = 1;
+}
+
+message ListCategoryRequest {
+
+}
+
+message ListCategoryResponse {
+    repeated Category categories = 1;
+}
+
+message CreateCategoryReq {
+    string name = 1;
+    string keyword = 2;
+}
+
+message CreateCategoryResponse{
+    int64 status = 1;
+    string message = 2;
+}
+
+message UpdateCategoryReq {
+    int64 id = 1;
+    string name = 2;
+    string keyword = 3;
+}
+
+message UpdateCategoryResponse{
+    int64 status = 1;
+    string message = 2;
+}
+
+message DeleteCategoryRequest {
+    int64 id = 1;
+}
+
+message DeleteCategoryResponse {
+    int64 status = 1;
+    string message = 2;
+}
+
+service CategoryService {
+    rpc CreateCategory(CreateCategoryReq) returns (CreateCategoryResponse);
+    rpc ReadCategory(ReadCategoryRequest) returns (ReadCategoryResponse);
+    rpc UpdateCategory(UpdateCategoryReq) returns (UpdateCategoryResponse);
+    rpc DeleteCategory(DeleteCategoryRequest) returns (DeleteCategoryResponse);
+    rpc ListCategories(ListCategoryRequest) returns (ListCategoryResponse);
+}
+
+
+
+
