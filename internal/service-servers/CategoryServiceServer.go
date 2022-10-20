@@ -6,8 +6,11 @@ import (
 	"github.com/sanzharanarbay/golang_gRPC_crud_eample/configs/database"
 	"github.com/sanzharanarbay/golang_gRPC_crud_eample/internal/models"
 	"github.com/sanzharanarbay/golang_gRPC_crud_eample/internal/repositories"
+	"github.com/sanzharanarbay/golang_gRPC_crud_eample/internal/requests"
 	serializers "github.com/sanzharanarbay/golang_gRPC_crud_eample/internal/serializers"
 	"github.com/sanzharanarbay/golang_gRPC_crud_eample/internal/services"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type CategoryServiceServer  struct {
@@ -21,6 +24,12 @@ var catService = services.NewCategoryService(catRepo)
 
 func (c *CategoryServiceServer) ReadCategory(ctx context.Context, req *serializers.ReadCategoryRequest) (*serializers.ReadCategoryResponse, error){
 	category , _ := catService.GetSingleCategory(int(req.GetId()))
+
+	if category == nil{
+		err := status.Error(codes.NotFound, "The category was not found")
+		return nil, err
+	}
+
 	response := &serializers.ReadCategoryResponse{
 		Category: &serializers.Category{
 			Id:       category.ID,
@@ -62,6 +71,12 @@ func (c *CategoryServiceServer) CreateCategory(ctx context.Context, req *seriali
 		Keyword: req.GetKeyword(),
 	}
 
+	validErrs := requests.NewCategoryRequest(&categoryReq).ValidateCategory()
+
+	if len(validErrs) > 0{
+		return nil, status.Error(codes.InvalidArgument, validErrs.Encode())
+	}
+
 	created, err := catService.InsertCategory(&categoryReq)
 
 	if err != nil {
@@ -85,6 +100,19 @@ func (c *CategoryServiceServer) UpdateCategory(ctx context.Context, req *seriali
 		Keyword: req.GetKeyword(),
 	}
 
+	category , _ := catService.GetSingleCategory(int(req.GetId()))
+
+	if category == nil{
+		err := status.Error(codes.NotFound, "The category was not found")
+		return nil, err
+	}
+
+	validErrs := requests.NewCategoryRequest(&categoryReq).ValidateCategory()
+
+	if len(validErrs) > 0{
+		return nil, status.Error(codes.InvalidArgument, validErrs.Encode())
+	}
+
 	updated, err := catService.UpdateCategory(&categoryReq, int(req.GetId()))
 
 	if err != nil {
@@ -103,6 +131,13 @@ func (c *CategoryServiceServer) UpdateCategory(ctx context.Context, req *seriali
 }
 
 func (c *CategoryServiceServer) DeleteCategory(ctx context.Context, req *serializers.DeleteCategoryRequest) (*serializers.DeleteCategoryResponse, error){
+
+	category , _ := catService.GetSingleCategory(int(req.GetId()))
+
+	if category == nil{
+		err := status.Error(codes.NotFound, "The category was not found")
+		return nil, err
+	}
 
 	deleted, err := catService.DeleteCategory(int(req.GetId()))
 

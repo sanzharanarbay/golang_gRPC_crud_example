@@ -9,13 +9,15 @@ import (
 )
 
 func InitMethods() {
-	srv := service_servers.CategoryServiceServer{}
+	srvCategory := service_servers.CategoryServiceServer{}
+	srvProduct := service_servers.ProductServiceServer{}
 	lis, err := net.Listen("tcp", ":9000")
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	grpcServer := grpc.NewServer()
-	serializers.RegisterCategoryServiceServer(grpcServer, &srv)
+	serializers.RegisterCategoryServiceServer(grpcServer, &srvCategory)
+	serializers.RegisterProductServiceServer(grpcServer, &srvProduct)
 
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %s", err)

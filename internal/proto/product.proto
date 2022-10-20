@@ -1,0 +1,75 @@
+syntax = "proto3";
+package proto;
+option go_package = "./";
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    int64 category_id = 4;
+    double price = 5;
+    string created_at= 6;
+    string updated_at = 7;
+}
+
+message ReadProductRequest {
+    int64 id = 1;
+}
+
+message ReadProductResponse {
+    Product product = 1;
+}
+
+message ListProductRequest {
+
+}
+
+message ListProductResponse {
+    repeated Product products = 1;
+}
+
+message CreateProductReq {
+    string name = 1;
+    string description = 2;
+    int64 category_id = 3;
+    double price = 4;
+}
+
+message CreateProductResponse{
+    int64 status = 1;
+    string message = 2;
+}
+
+message UpdateProductReq {
+    int64 id = 1;
+    string name = 2;
+    string description = 3;
+    int64 category_id = 4;
+    double price = 5;
+}
+
+message UpdateProductResponse{
+    int64 status = 1;
+    string message = 2;
+}
+
+message DeleteProductRequest {
+    int64 id = 1;
+}
+
+message DeleteProductResponse {
+    int64 status = 1;
+    string message = 2;
+}
+
+service ProductService {
+    rpc CreateProduct(CreateProductReq) returns (CreateProductResponse);
+    rpc ReadProduct(ReadProductRequest) returns (ReadProductResponse);
+    rpc UpdateProduct(UpdateProductReq) returns (UpdateProductResponse);
+    rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+    rpc ListProducts(ListProductRequest) returns (ListProductResponse);
+}
+
+
+
+
