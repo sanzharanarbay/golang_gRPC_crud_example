@@ -1,8 +1,8 @@
 # Golang gRPC with the CRUD Methods
--docker-compose build --no-cache
--docker-compose up -d
--docker-compose ps
--docker-compose logs -f {serviceName} 
+- docker-compose build --no-cache
+- docker-compose up -d
+- docker-compose ps
+- docker-compose logs -f {serviceName} 
 
 
 # Protoc commands (additional commands, if you want to generate new proto services)
