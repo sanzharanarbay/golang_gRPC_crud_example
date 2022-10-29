@@ -20,10 +20,10 @@ func NewCategoryRepository(dbClient *sql.DB) *CategoryRepository {
 
 type CategoryRepositoryInterface interface {
 	GetCategoryById(ID int) (*models.Category, error)
-	GetAllCategories() ([]*models.Category, error)
+	GetAllCategories() (*[]models.Category, error)
 	SaveCategory(*models.Category) (bool, error)
 	DeleteCategory(ID int) (bool, error)
-	UpdateCategory(*models.Category) (bool, error)
+	UpdateCategory(category *models.Category, catID int) (bool, error)
 }
 
 func (c *CategoryRepository) GetCategoryById(ID int) (*models.Category, error) {

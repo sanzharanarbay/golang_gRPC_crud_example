@@ -20,10 +20,10 @@ func NewProductRepository(dbClient *sql.DB) *ProductRepository {
 
 type ProductRepositoryInterface interface {
 	GetProductById(ID int) (*models.Product, error)
-	GetAllCategories() ([]*models.Product, error)
+	GetAllProducts() (*[]models.Product, error)
 	SaveProduct(*models.Product) (bool, error)
 	DeleteProduct(ID int) (bool, error)
-	UpdateProduct(*models.Product) (bool, error)
+	UpdateProduct(product *models.Product, catID int) (bool, error)
 }
 
 
